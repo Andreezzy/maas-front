@@ -10,3 +10,7 @@
     @apply h-full;
   }
 }
+
+.fc-day-today {
+  background-color: inherit !important;
+}
