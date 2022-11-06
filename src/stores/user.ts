@@ -40,7 +40,7 @@ export const useUserStore = defineStore('user', {
           Session.setJWTData(data.user)
           Session.setToken(data.token)
         })
-      router.push({name: 'root'});
+      router.push({name: 'dashboard'});
     },
     logout() {
       this.data = null;
