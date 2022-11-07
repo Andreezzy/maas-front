@@ -4,11 +4,16 @@ import router from '@/router';
 import { UserService } from '@/services/user';
 import Session from "@/utils/session"
 
+import { UserInterface } from '@/interfaces/UserInterface';
+
 const userService: UserService = new UserService()
 
+interface State {
+  data: UserInterface | null
+}
+
 export const useUserStore = defineStore('user', {
-  state: () => ({
-    users: {},
+  state: (): State => ({
     data: null || Session.getJWTData(),
   }),
 
