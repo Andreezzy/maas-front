@@ -15,7 +15,14 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
-    component: () => import("@/views/DashboardView.vue"),
+    component: () => import("@/views/DashboardLayout.vue"),
+    children: [
+      {
+        path: "",
+        name: "dashboard",
+        component: () => import("@/views/ScheduleView.vue"),
+      }
+    ]
   }
 ]
 
