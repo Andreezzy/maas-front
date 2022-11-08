@@ -14,13 +14,21 @@
   const props = defineProps<{
     events: EventInterface[],
     selectable: boolean,
-    schedule: ScheduleInterface,
     addEvent: Function,
     removeEvent: Function,
+    slotMinTime: string,
+    slotMaxTime: string,
+    validRange: object,
+    businessHours: []
   }>()
 
-  const { selectable, events } = toRefs(props);
-  const { slotMinTime, slotMaxTime, businessHours, validRange } = props.schedule;
+  const { selectable,
+          events,
+          slotMinTime,
+          slotMaxTime,
+          validRange,
+          businessHours
+  } = toRefs(props);
 
   const handleEventClick = (clickInfo: EventClickArg) => {
     // const { extendedProps } = clickInfo.event

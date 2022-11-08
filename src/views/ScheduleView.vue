@@ -42,10 +42,13 @@
     </div>
     <EventCalendar
       :selectable="editEvents"
-      :schedule="currentSchedule"
       :events="activeEvents"
       :addEvent="addEvent"
       :removeEvent="removeEvent"
+      :slotMinTime="currentSchedule.slotMinTime"
+      :slotMaxTime="currentSchedule.slotMaxTime"
+      :validRange="currentSchedule.validRange"
+      :businessHours="currentSchedule.businessHours"
     />
   </div>
 </template>
