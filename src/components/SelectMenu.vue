@@ -19,7 +19,7 @@
 <template>
   <Listbox as="div" class="min-w-[200px]">
     <ListboxLabel class="block text-sm font-medium text-gray-700">{{ textLabel }}</ListboxLabel>
-    <div v-if="values.length > 0" class="relative mt-1">
+    <div v-if="values && values.length > 0" class="relative mt-1">
       <ListboxButton class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
         <span class="flex items-center">
           <img v-if="selected?.avatar" :src="selected.avatar" alt="" class="h-6 w-6 flex-shrink-0 rounded-full" />

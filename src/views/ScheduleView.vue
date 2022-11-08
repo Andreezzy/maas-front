@@ -15,11 +15,11 @@
   const eventStore = useEventStore();
 
   const { setScheduleSelected } = dashboardStore;
-  const { all, setSelected, setCurrentSchedule } = companyStore;
+  const { getAll, setSelected, setCurrentSchedule } = companyStore;
   const { editMyEvents, loadEvents, saveEvents, addEvent, removeEvent, cancelEdit } = eventStore;
 
   const { editEvents, companySelected, scheduleSelected } = storeToRefs(dashboardStore);
-  const { selected, schedules, currentSchedule } = storeToRefs(companyStore);
+  const { all, selected, schedules, currentSchedule } = storeToRefs(companyStore);
   const { activeEvents } = storeToRefs(eventStore);
 
   const loadCalendarData = (schedule: ScheduleInterface) => {
@@ -27,6 +27,7 @@
     loadEvents(schedule);
     setScheduleSelected(schedule);
   }
+  await getAll()
 </script>
 <template>
   <div class="flex">
