@@ -11,8 +11,6 @@
   const userStore = useUserStore();
   const { currentUser } = userStore;
 
-  currentUser.color = '#ff0000'
-
   const props = defineProps<{
     events: EventInterface[],
     selectable: boolean,
