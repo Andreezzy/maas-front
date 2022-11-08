@@ -3,6 +3,5 @@ export interface UserInterface {
   name: string;
   avatar: string;
   color: string;
-  imageUrl: string | null;
   isAuthenticated?: boolean;
 }
