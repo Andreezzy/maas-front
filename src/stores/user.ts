@@ -9,12 +9,12 @@ import { UserInterface } from '@/interfaces/UserInterface';
 const userService: UserService = new UserService()
 
 interface State {
-  data: UserInterface | null
+  currentUser: UserInterface | null
 }
 
 export const useUserStore = defineStore('user', {
   state: (): State => ({
-    data: null || Session.getJWTData(),
+    currentUser: null || Session.getJWTData(),
   }),
 
   actions: {
@@ -26,10 +26,10 @@ export const useUserStore = defineStore('user', {
       }
 
       const isAuthenticated: boolean = await userService.validateJwt()
-        .then((data: any) => {
-          this.data = data
-          data.isAuthenticated = true
-          Session.setJWTData(data)
+        .then((user: any) => {
+          this.currentUser = user
+          user.isAuthenticated = true
+          Session.setJWTData(user)
           return true
         })
         .catch(() => false)
@@ -39,16 +39,16 @@ export const useUserStore = defineStore('user', {
 
     async login(email: string, password: string) {
       const user = await userService.login(email, password)
-        .then((data: any) => {
-          this.data = data.user
-          data.user.isAuthenticated = true
-          Session.setJWTData(data.user)
-          Session.setToken(data.token)
+        .then((currentUser: any) => {
+          this.currentUser = currentUser.user
+          currentUser.user.isAuthenticated = true
+          Session.setJWTData(currentUser.user)
+          Session.setToken(currentUser.token)
         })
       router.push({name: 'dashboard'});
     },
     logout() {
-      this.data = null;
+      this.currentUser = null;
       Session.clear()
       router.push({name: 'login'});
     }

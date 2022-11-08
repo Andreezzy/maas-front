@@ -7,9 +7,9 @@
 
   const userStore = useUserStore();
   
-  const { data: user } = userStore
+  const { currentUser } = userStore
 
-  user.imageUrl = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
+  currentUser.imageUrl = 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
 
   const navigation = [
     { name: 'Dashboard', href: '#', current: true },
@@ -46,10 +46,10 @@
                 <!-- Profile dropdown -->
                 <Menu as="div" class="relative ml-3">
                   <div class="flex items-center justify-items-center">
-                    <div class="text-sm font-medium leading-none text-gray-400 mr-4">{{ user.email }}</div>
+                    <div class="text-sm font-medium leading-none text-gray-400 mr-4">{{ currentUser.email }}</div>
                     <MenuButton class="flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                       <span class="sr-only">Open user menu</span>
-                      <img class="h-8 w-8 rounded-full" :src="user.imageUrl" alt="" />
+                      <img class="h-8 w-8 rounded-full" :src="currentUser.imageUrl" alt="" />
                     </MenuButton>
                   </div>
                   <transition enter-active-class="transition ease-out duration-100" enter-from-class="transform opacity-0 scale-95" enter-to-class="transform opacity-100 scale-100" leave-active-class="transition ease-in duration-75" leave-from-class="transform opacity-100 scale-100" leave-to-class="transform opacity-0 scale-95">
@@ -87,11 +87,11 @@
         <div class="border-t border-gray-700 pt-4 pb-3">
           <div class="flex items-center px-5">
             <div class="flex-shrink-0">
-              <img class="h-10 w-10 rounded-full" :src="user.imageUrl" alt="" />
+              <img class="h-10 w-10 rounded-full" :src="currentUser.imageUrl" alt="" />
             </div>
             <div class="ml-3">
-              <div class="text-base font-medium leading-none text-white">{{ user.name }}</div>
-              <div class="text-sm font-medium leading-none text-gray-400">{{ user.email }}</div>
+              <div class="text-base font-medium leading-none text-white">{{ currentUser.name }}</div>
+              <div class="text-sm font-medium leading-none text-gray-400">{{ currentUser.email }}</div>
             </div>
           </div>
           <div class="mt-3 space-y-1 px-2">
@@ -100,7 +100,7 @@
         </div>
       </DisclosurePanel>
     </Disclosure>
-    <header class="py-10">
+    <header class="py-5">
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <h1 class="text-3xl font-bold tracking-tight text-white">Dashboard</h1>
       </div>
