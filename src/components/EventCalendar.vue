@@ -1,91 +1,83 @@
 <script setup lang="ts">
-  import '@fullcalendar/core/vdom'
-  import FullCalendar, { DateSelectArg, EventClickArg } from '@fullcalendar/vue3'
-  import timeGridPlugin from '@fullcalendar/timegrid'
-  import interactionPlugin from '@fullcalendar/interaction'
-  import { reactive } from 'vue-demi'
+  import '@fullcalendar/core/vdom';
+  import FullCalendar, { DateSelectArg, EventClickArg, EventInput } from '@fullcalendar/vue3';
+  import timeGridPlugin from '@fullcalendar/timegrid';
+  import interactionPlugin from '@fullcalendar/interaction';
+  import { ref, toRefs } from 'vue';
+  import { useUserStore } from '@/stores/user';
+  import { EventInterface } from '@/interfaces/EventInterface';
+  import { ScheduleInterface } from '@/interfaces/ScheduleInterface';
 
-  interface SelectedDate {
-    dateStr: string
-  }
+  const userStore = useUserStore();
+  const { currentUser } = userStore;
+
+  currentUser.color = '#ff0000'
+
+  const props = defineProps<{
+    events: EventInterface[],
+    selectable: boolean,
+    schedule: ScheduleInterface,
+    addEvent: Function,
+    removeEvent: Function,
+  }>()
+
+  const { selectable, events } = toRefs(props);
+  const { slotMinTime, slotMaxTime, businessHours, validRange } = props.schedule;
 
   const handleEventClick = (clickInfo: EventClickArg) => {
-    if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-      clickInfo.event.remove()
+    // const { extendedProps } = clickInfo.event
+    if (selectable.value && confirm(`Estás seguro de eliminar el evento: ${clickInfo.event.start?.getHours()} - ${clickInfo.event.end?.getHours()}`)) {
+      // clickInfo.event.remove()
+      props.removeEvent(clickInfo.event);
     }
   }
 
   const handleDateSelect = (selectInfo: DateSelectArg) => {
-    // let title = prompt('Please enter a new title for your event')
-    let calendarApi = selectInfo.view.calendar
-
-    calendarApi.unselect() // clear date selection
-
-    // if (title) {
-      calendarApi.addEvent({
-        id: Date.now(),
-        title: 'Hola mundo',
-        start: selectInfo.startStr,
-        end: selectInfo.endStr,
-        allDay: selectInfo.allDay
-      })
-    // }
+    let calendarApi = selectInfo.view.calendar;
+    calendarApi.unselect();
+    const newEvent: EventInput = {
+      id: Date.now().toString(),
+      title: currentUser.name,
+      start: selectInfo.startStr,
+      end: selectInfo.endStr,
+      backgroundColor: currentUser.color,
+      borderColor: currentUser.color,
+    }
+    // calendarApi.addEvent(newEvent)
+    if(selectable.value)
+      props.addEvent(newEvent);
   }
 
-  const options = reactive({
-    plugins: [ timeGridPlugin, interactionPlugin ],
-    initialView: 'timeGridWeek',
+  const options = ref({
     allDaySlot: false,
+    displayEventTime: false,
+    expandRows: true,
+    headerToolbar: {
+      left: '',
+      center: 'title',
+      right: ''
+    },
+    // height: '100%',
+    initialView: 'timeGridWeek',
+    plugins: [ timeGridPlugin, interactionPlugin ],
     slotDuration: '01:00:00',
     slotLabelFormat: {
       hour: '2-digit',
       meridiem: 'lowercase'
     },
-    headerToolbar: {
-      left:   '',
-      center: 'title',
-      right:  ''
-    },
-    selectable: true,
-    height: '100%',
-    slotMinTime: "07:00:00",
-    slotMaxTime: "21:00:00",
-    expandRows: true,
-    businessHours: [
-      {
-        daysOfWeek: [ 0 ], // Monday, Tuesday, Wednesday
-        startTime: '08:00', // 8am
-        endTime: '12:00', // 6pm
-        color: 'red'
-      },
-      {
-        daysOfWeek: [ 1, 2, 3 ], // Monday, Tuesday, Wednesday
-        startTime: '08:00', // 8am
-        endTime: '18:00' // 6pm
-      },
-      {
-        daysOfWeek: [ 4, 5 ], // Thursday, Friday
-        startTime: '10:00', // 10am
-        endTime: '16:00' // 4pm
-      }
-    ],
-    validRange: {
-      start: '2022-11-01',
-      end: '2022-11-26'
-    },
     selectOverlap: false,
     eventOverlap: false,
-    selectConstraint: "businessHours",
-    events: [
-      { title: 'event 1', start: '2022-11-11T10:00:00', end: '2022-11-11T12:00:00', backgroundColor: '#ff0000', borderColor: '#ff0000' },
-      { title: 'event 2', start: '2022-11-10T10:00:00', end: '2022-10-12T11:00:00' },
-      { title: 'event 3', start: '2022-11-10T10:00:00', end: '2022-10-12T13:00:00' }
-    ],
-    displayEventTime:false,
+    selectable: selectable,
+    slotMinTime: slotMinTime,
+    slotMaxTime: slotMaxTime,
+    businessHours: businessHours,
+    selectConstraint: businessHours,
+    validRange: validRange,
+    events: events,
     eventClick: (arg: EventClickArg) => handleEventClick(arg),
     select: (selectInfo: DateSelectArg) => handleDateSelect(selectInfo)
   })
 </script>
 <template>
-  <FullCalendar :options="options" class="" />
+  <FullCalendar :options="options" />
 </template>

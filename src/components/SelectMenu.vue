@@ -1,28 +1,29 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, toRefs } from 'vue'
   import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
   import { CheckIcon, ChevronUpDownIcon } from '@heroicons/vue/20/solid'
 
   const props = defineProps<{
     textLabel: string,
+    selected: any,
     values: [],
     onSelect: Function
   }>()
 
+  const { selected, values } = toRefs(props)
+
   const execOnSelect = (val: any) => {
     props.onSelect(val)
   }
-
-  const selected = ref({})
 </script>
 <template>
-  <Listbox as="div" v-model="selected" class="min-w-[200px]">
+  <Listbox as="div" class="min-w-[200px]">
     <ListboxLabel class="block text-sm font-medium text-gray-700">{{ textLabel }}</ListboxLabel>
     <div v-if="values.length > 0" class="relative mt-1">
       <ListboxButton class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
         <span class="flex items-center">
-          <img v-show="selected.avatar" :src="selected.avatar" alt="" class="h-6 w-6 flex-shrink-0 rounded-full" />
-          <span class="ml-3 block truncate">{{ selected.name || `Seleccionar ${textLabel}` }}</span>
+          <img v-if="selected?.avatar" :src="selected.avatar" alt="" class="h-6 w-6 flex-shrink-0 rounded-full" />
+          <span class="ml-3 block truncate">{{ selected?.name || `Seleccionar ${textLabel}` }}</span>
         </span>
         <span class="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
           <ChevronUpDownIcon class="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -34,7 +35,7 @@
           <ListboxOption as="template" v-for="value in values" :key="value.id" :value="value" v-slot="{ active, selected }" @click="()=>(execOnSelect(value))">
             <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'relative cursor-default select-none py-2 pl-3 pr-9']">
               <div class="flex items-center">
-                <img v-show="value.avatar" :src="value.avatar" alt="" class="h-6 w-6 flex-shrink-0 rounded-full" />
+                <img v-if="value.avatar" :src="value.avatar" alt="" class="h-6 w-6 flex-shrink-0 rounded-full" />
                 <span :class="[selected ? 'font-semibold' : 'font-normal', 'ml-3 block truncate']">{{ value.name }}</span>
               </div>
 
