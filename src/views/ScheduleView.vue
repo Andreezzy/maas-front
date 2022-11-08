@@ -14,7 +14,7 @@
   const companyStore = useCompanyStore();
   const eventStore = useEventStore();
 
-  const { setScheduleSelected } = dashboardStore;
+  const { setScheduleSelected, setEditEvents } = dashboardStore;
   const { getAll, setSelected, setCurrentSchedule } = companyStore;
   const { editMyEvents, loadEvents, saveEvents, addEvent, removeEvent, cancelEdit } = eventStore;
 
@@ -25,6 +25,7 @@
   const loadCalendarData = (schedule: ScheduleInterface) => {
     setCurrentSchedule(schedule);
     loadEvents(schedule);
+    setEditEvents(false);
     setScheduleSelected(schedule);
   }
   await getAll()
