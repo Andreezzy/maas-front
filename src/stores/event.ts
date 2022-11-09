@@ -2,6 +2,9 @@ import { defineStore } from "pinia"
 import { EventInterface } from '@/interfaces/EventInterface'
 import { ScheduleInterface } from "@/interfaces/ScheduleInterface";
 import { useDashboardStore } from '@/stores/dashboard';
+import { EventService } from "@/services/event";
+
+const eventService: EventService = new EventService()
 
 const dashboardStore = useDashboardStore();
 
@@ -72,9 +75,21 @@ export const useEventStore = defineStore('event', {
       this.activeEvents = events;
     },
 
-    loadEvents(schedule: ScheduleInterface) {
-      // request to get events
-      this.setActiveEvents(this.allEvents);
+    setAllEvents(events: EventInterface[]) {
+      this.allEvents = events;
+    },
+
+    setMyEvents(events: EventInterface[]) {
+      this.myEvents = events;
+    },
+
+    async loadEvents(schedule: ScheduleInterface) {
+      await eventService.getAll(schedule.id)
+        .then((events: any) => {
+          this.setAllEvents(events.all_drafts)
+          this.setMyEvents(events.my_drafts)
+          this.setActiveEvents(events.all_drafts)
+        })
     },
 
     saveEvents() {
