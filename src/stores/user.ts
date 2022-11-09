@@ -6,6 +6,8 @@ import Session from "@/utils/session"
 
 import { UserInterface } from '@/interfaces/UserInterface';
 
+import { useResetStore } from '@/utils/useResetStore'
+
 const userService: UserService = new UserService()
 
 interface State {
@@ -48,8 +50,9 @@ export const useUserStore = defineStore('user', {
       router.push({name: 'dashboard-events'});
     },
     logout() {
-      this.currentUser = null;
       Session.clear()
+      const resetStore = useResetStore()
+      resetStore.all()
       router.push({name: 'login'});
     }
   }
