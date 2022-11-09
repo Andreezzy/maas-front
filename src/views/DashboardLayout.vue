@@ -9,11 +9,7 @@
       <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
         <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
           <div class="h-full min-h-[100px] rounded-lg border-gray-200">
-            <router-view v-slot="{ Component }">
-              <suspense>
-                <component :is="Component"/>
-              </suspense>
-            </router-view>
+            <router-view></router-view>
           </div>
         </div>
       </div>

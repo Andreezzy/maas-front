@@ -25,7 +25,7 @@ const isAuthenticatedGuard = async (
   }
 
   if(isAuthenticated && to.name == 'login') {
-    next({name: 'dashboard'})
+    next({name: 'dashboard-events'})
     return
   }
   next()

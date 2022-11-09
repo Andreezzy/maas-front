@@ -18,9 +18,9 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import("@/views/DashboardLayout.vue"),
     children: [
       {
-        path: "",
-        name: "dashboard",
-        component: () => import("@/views/ScheduleView.vue"),
+        path: "/dashboard/events",
+        name: "dashboard-events",
+        component: () => import("@/views/EventView.vue"),
       }
     ]
   }
