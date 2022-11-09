@@ -80,6 +80,7 @@
     selectConstraint: businessHours,
     validRange: validRange,
     events: events,
+    timeZone: 'UTC',
     eventClick: (arg: EventClickArg) => handleEventClick(arg),
     select: (selectInfo: DateSelectArg) => handleDateSelect(selectInfo)
   })
