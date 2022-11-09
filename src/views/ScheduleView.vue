@@ -16,11 +16,11 @@
 
   const { setScheduleSelected, setEditEvents } = dashboardStore;
   const { getAll, setSelected, setCurrentSchedule } = companyStore;
-  const { editMyEvents, loadEvents, saveEvents, addEvent, removeEvent, cancelEdit } = eventStore;
+  const { editMyEvents, loadEvents, saveEvents, addEvent, removeEvent, cancelEdit, loadAllDrafts, loadAllPublished } = eventStore;
 
-  const { editEvents, companySelected, scheduleSelected } = storeToRefs(dashboardStore);
+  const { editEvents, companySelected, scheduleSelected, showAllDraftsButton } = storeToRefs(dashboardStore);
   const { all, selected, schedules, currentSchedule } = storeToRefs(companyStore);
-  const { activeEvents } = storeToRefs(eventStore);
+  const { activeEvents, title } = storeToRefs(eventStore);
 
   const loadCalendarData = (schedule: ScheduleInterface) => {
     setCurrentSchedule(schedule);
@@ -36,10 +36,15 @@
     <SelectMenu text-label='Week' :values="schedules" :selected="scheduleSelected" :onSelect="loadCalendarData" />
   </div>
   <div v-if="currentSchedule" class="mt-4 flex flex-col">
-    <button v-if="!editEvents" @click="editMyEvents" type="button" class="btn-primary self-end max-w-[250px]">Editar Disponibilidad</button>
-    <div v-else class="self-end">
-      <button @click="()=>saveEvents(scheduleSelected.id)" type="button" class="btn-primary max-w-[250px] mr-4">Guardar Cambios</button>
-      <button @click="cancelEdit" type="button" class="btn-primary-outline max-w-[250px]">Cancelar</button>
+    <h2 class="text-center text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+      <span class="block">{{ title }}</span>
+    </h2>
+    <div class="self-end mt-4">
+      <button v-if="!showAllDraftsButton" @click="loadAllDrafts" type="button" class="btn-primary self-end max-w-[250px] mr-4">Turnos del Equipo</button>
+      <button v-if="showAllDraftsButton" @click="loadAllPublished" type="button" class="btn-primary self-end max-w-[250px] mr-4">Turnos Confirmados</button>
+      <button v-if="!editEvents" @click="editMyEvents" type="button" class="btn-primary self-end max-w-[250px]">Editar Mi Disponibilidad</button>
+      <button v-if="editEvents" @click="()=>saveEvents(scheduleSelected.id)" type="button" class="btn-primary max-w-[250px] mr-4">Guardar Cambios</button>
+      <button v-if="editEvents" @click="cancelEdit" type="button" class="btn-primary-outline max-w-[250px]">Cancelar</button>
     </div>
     <EventCalendar
       :selectable="editEvents"

@@ -8,13 +8,14 @@ const eventService: EventService = new EventService()
 
 const dashboardStore = useDashboardStore();
 
-const { setEditEvents } = dashboardStore;
+const { setEditEvents, setShowAllDraftsButton } = dashboardStore;
 
 interface State {
   myDrafts: EventInterface[] | [],
   allDrafts: EventInterface[] | [],
   activeEvents: EventInterface[] | [],
-  allPublished: EventInterface[] | []
+  allPublished: EventInterface[] | [],
+  title: string
 }
 
 export const useEventStore = defineStore('event', {
@@ -70,6 +71,7 @@ export const useEventStore = defineStore('event', {
     ],
     allPublished: [],
     activeEvents: [],
+    title: '',
   }),
 
   actions: {
@@ -89,6 +91,10 @@ export const useEventStore = defineStore('event', {
       this.myDrafts = events;
     },
 
+    setTitleConfirmed() {
+      this.title = 'Turnos Confirmados';
+    },
+
     async loadEvents(schedule: ScheduleInterface) {
       await eventService.getAll(schedule.id)
         .then((events: any) => {
@@ -96,33 +102,50 @@ export const useEventStore = defineStore('event', {
           this.setAllDrafts(events.all_drafts);
           this.setAllPublished(events.all_published);
           this.setActiveEvents(events.all_published);
+          this.setTitleConfirmed();
         })
     },
 
     async saveEvents(schedule_id: number) {
       await eventService.updateMyEvents(this.activeEvents, schedule_id)
         .then((events: any) => {
-          console.log(events)
           this.setMyDrafts(events.my_drafts);
           this.setAllDrafts(events.all_drafts);
           this.setAllPublished(events.all_published);
-          this.setActiveEvents(events.all_published)
+          this.setActiveEvents(events.all_published);
         })
         .catch((err) => {
           console.warn("HUBO UN ERROR: ", err)
           this.setActiveEvents(this.allPublished);
         })
       setEditEvents(false);
+      this.setTitleConfirmed()
+    },
+
+    loadAllDrafts() {
+      this.setActiveEvents(this.allDrafts);
+      setEditEvents(false);
+      setShowAllDraftsButton(true);
+      this.title = 'Turnos Del Equipo';
+    },
+
+    loadAllPublished() {
+      this.setActiveEvents(this.allPublished);
+      setEditEvents(false);
+      setShowAllDraftsButton(false);
+      this.setTitleConfirmed()
     },
 
     editMyEvents() {
       setEditEvents(true);
       this.setActiveEvents(this.myDrafts);
+      this.title = 'Mi Disponibilidad';
     },
 
     cancelEdit() {
       this.setActiveEvents(this.allPublished);
       setEditEvents(false);
+      this.setTitleConfirmed()
     },
 
     addEvent(event: EventInterface, user_id: number, schedule_id: number) {

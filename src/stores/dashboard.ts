@@ -4,6 +4,7 @@ interface State {
   editEvents: boolean;
   companySelected: any;
   scheduleSelected: any;
+  showAllDraftsButton: boolean;
 }
 
 export const useDashboardStore = defineStore('dashboard', {
@@ -11,6 +12,7 @@ export const useDashboardStore = defineStore('dashboard', {
     editEvents: false,
     companySelected: null,
     scheduleSelected: null,
+    showAllDraftsButton: false
   }),
 
   actions: {
@@ -22,6 +24,9 @@ export const useDashboardStore = defineStore('dashboard', {
     },
     setScheduleSelected(value: any) {
       this.scheduleSelected = value;
+    },
+    setShowAllDraftsButton(value: boolean) {
+      this.showAllDraftsButton = value;
     },
   }
 });
