@@ -16,6 +16,7 @@
     selectable: boolean,
     addEvent: Function,
     removeEvent: Function,
+    schedule_id: number,
     slotMinTime: string,
     slotMaxTime: string,
     validRange: object,
@@ -24,6 +25,7 @@
 
   const { selectable,
           events,
+          schedule_id,
           slotMinTime,
           slotMaxTime,
           validRange,
@@ -51,7 +53,7 @@
     }
     // calendarApi.addEvent(newEvent)
     if(selectable.value)
-      props.addEvent(newEvent);
+      props.addEvent(newEvent, currentUser.id, schedule_id);
   }
 
   const options = ref({

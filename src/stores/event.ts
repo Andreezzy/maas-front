@@ -92,9 +92,22 @@ export const useEventStore = defineStore('event', {
         })
     },
 
-    saveEvents() {
-      this.myEvents = this.activeEvents;
-      this.activeEvents = this.allEvents;
+    async saveEvents(schedule_id: number) {
+      await eventService.updateMyEvents(this.activeEvents, schedule_id)
+        .then((events: any) => {
+          console.log(events)
+          //this.myEvents = this.activeEvents;
+          //this.activeEvents = this.allEvents;
+          this.myEvents = events.my_drafts
+          this.allEvents = events.all_drafts
+          // this.my_drafts = events.my_drafts
+          // this.setActiveEvents(events.all_published)
+          this.setActiveEvents(events.all_drafts)
+        })
+        .catch((err) => {
+          console.warn("HUBO UN ERROR: ", err)
+          this.setActiveEvents(this.allEvents);
+        })
       setEditEvents(false);
     },
 
@@ -108,8 +121,9 @@ export const useEventStore = defineStore('event', {
       setEditEvents(false);
     },
 
-    addEvent(event: EventInterface) {
-      this.activeEvents = [...this.activeEvents, event]
+    addEvent(event: EventInterface, user_id: number, schedule_id: number) {
+      const payload = {...event, user_id, schedule_id, kind: 'draft'}
+      this.activeEvents = [...this.activeEvents, payload]
     },
 
     removeEvent(event: EventInterface) {

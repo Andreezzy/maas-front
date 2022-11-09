@@ -38,7 +38,7 @@
   <div v-if="currentSchedule" class="mt-4 flex flex-col">
     <button v-if="!editEvents" @click="editMyEvents" type="button" class="btn-primary self-end max-w-[250px]">Editar Disponibilidad</button>
     <div v-else class="self-end">
-      <button @click="saveEvents" type="button" class="btn-primary max-w-[250px] mr-4">Guardar Cambios</button>
+      <button @click="()=>saveEvents(scheduleSelected.id)" type="button" class="btn-primary max-w-[250px] mr-4">Guardar Cambios</button>
       <button @click="cancelEdit" type="button" class="btn-primary-outline max-w-[250px]">Cancelar</button>
     </div>
     <EventCalendar
@@ -46,6 +46,7 @@
       :events="activeEvents"
       :addEvent="addEvent"
       :removeEvent="removeEvent"
+      :schedule_id="scheduleSelected.id"
       :slotMinTime="currentSchedule.slotMinTime"
       :slotMaxTime="currentSchedule.slotMaxTime"
       :validRange="currentSchedule.validRange"
