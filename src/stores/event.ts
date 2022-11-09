@@ -11,15 +11,16 @@ const dashboardStore = useDashboardStore();
 const { setEditEvents } = dashboardStore;
 
 interface State {
-  myEvents: EventInterface[] | [],
-  allEvents: EventInterface[] | [],
-  activeEvents: EventInterface[] | []
+  myDrafts: EventInterface[] | [],
+  allDrafts: EventInterface[] | [],
+  activeEvents: EventInterface[] | [],
+  allPublished: EventInterface[] | []
 }
 
 export const useEventStore = defineStore('event', {
 
   state: (): State => ({
-    myEvents: [
+    myDrafts: [
       {
         id: '1',
         title: 'Andres',
@@ -32,7 +33,7 @@ export const useEventStore = defineStore('event', {
         },
       },
     ],
-    allEvents: [
+    allDrafts: [
       {
         id: '1',
         title: 'Andres',
@@ -67,6 +68,7 @@ export const useEventStore = defineStore('event', {
         },
       }
     ],
+    allPublished: [],
     activeEvents: [],
   }),
 
@@ -75,20 +77,25 @@ export const useEventStore = defineStore('event', {
       this.activeEvents = events;
     },
 
-    setAllEvents(events: EventInterface[]) {
-      this.allEvents = events;
+    setAllPublished(events: EventInterface[]) {
+      this.allPublished = events;
     },
 
-    setMyEvents(events: EventInterface[]) {
-      this.myEvents = events;
+    setAllDrafts(events: EventInterface[]) {
+      this.allDrafts = events;
+    },
+
+    setMyDrafts(events: EventInterface[]) {
+      this.myDrafts = events;
     },
 
     async loadEvents(schedule: ScheduleInterface) {
       await eventService.getAll(schedule.id)
         .then((events: any) => {
-          this.setAllEvents(events.all_drafts)
-          this.setMyEvents(events.my_drafts)
-          this.setActiveEvents(events.all_drafts)
+          this.setMyDrafts(events.my_drafts);
+          this.setAllDrafts(events.all_drafts);
+          this.setAllPublished(events.all_published);
+          this.setActiveEvents(events.all_published);
         })
     },
 
@@ -96,28 +103,25 @@ export const useEventStore = defineStore('event', {
       await eventService.updateMyEvents(this.activeEvents, schedule_id)
         .then((events: any) => {
           console.log(events)
-          //this.myEvents = this.activeEvents;
-          //this.activeEvents = this.allEvents;
-          this.myEvents = events.my_drafts
-          this.allEvents = events.all_drafts
-          // this.my_drafts = events.my_drafts
-          // this.setActiveEvents(events.all_published)
-          this.setActiveEvents(events.all_drafts)
+          this.setMyDrafts(events.my_drafts);
+          this.setAllDrafts(events.all_drafts);
+          this.setAllPublished(events.all_published);
+          this.setActiveEvents(events.all_published)
         })
         .catch((err) => {
           console.warn("HUBO UN ERROR: ", err)
-          this.setActiveEvents(this.allEvents);
+          this.setActiveEvents(this.allPublished);
         })
       setEditEvents(false);
     },
 
     editMyEvents() {
       setEditEvents(true);
-      this.setActiveEvents(this.myEvents);
+      this.setActiveEvents(this.myDrafts);
     },
 
     cancelEdit() {
-      this.setActiveEvents(this.allEvents);
+      this.setActiveEvents(this.allPublished);
       setEditEvents(false);
     },
 
