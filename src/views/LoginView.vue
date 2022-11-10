@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { Form, Field } from 'vee-validate';
 import * as Yup from 'yup';
 import { useUserStore } from '@/stores/user';
@@ -10,7 +10,7 @@ const schema = Yup.object().shape({
   password: Yup.string().required('Password is required')
 });
 
-function onSubmit(values, { setErrors }) {
+function onSubmit(values: any, { setErrors }: any) {
   const user = useUserStore();
   const { email, password } = values;
   return user.login(email, password)
