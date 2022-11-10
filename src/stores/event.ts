@@ -80,19 +80,25 @@ export const useEventStore = defineStore('event', {
     },
 
     setAllPublished(events: EventInterface[]) {
-      this.allPublished = events;
+      this.allPublished = this.parseColor(events);
     },
 
     setAllDrafts(events: EventInterface[]) {
-      this.allDrafts = events;
+      this.allDrafts = this.parseColor(events);
     },
 
     setMyDrafts(events: EventInterface[]) {
-      this.myDrafts = events;
+      this.myDrafts = this.parseColor(events);
     },
 
     setTitleConfirmed() {
       this.title = 'Turnos Confirmados';
+    },
+
+    parseColor(events: EventInterface[]) {
+      return events.map((event: any) => (
+        { ...event, backgroundColor: event.color, borderColor: event.color }
+      ))
     },
 
     async loadEvents(schedule: ScheduleInterface) {
@@ -101,7 +107,7 @@ export const useEventStore = defineStore('event', {
           this.setMyDrafts(events.my_drafts);
           this.setAllDrafts(events.all_drafts);
           this.setAllPublished(events.all_published);
-          this.setActiveEvents(events.all_published);
+          this.setActiveEvents(this.allPublished);
           this.setTitleConfirmed();
         })
     },
@@ -112,7 +118,7 @@ export const useEventStore = defineStore('event', {
           this.setMyDrafts(events.my_drafts);
           this.setAllDrafts(events.all_drafts);
           this.setAllPublished(events.all_published);
-          this.setActiveEvents(events.all_published);
+          this.setActiveEvents(this.allPublished);
         })
         .catch((err) => {
           console.warn("HUBO UN ERROR: ", err)
