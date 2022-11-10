@@ -3,11 +3,6 @@ import isAuthenticatedGuard from './auth-guard'
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
-    name: 'root',
-    component: () => import("@/views/HomeView.vue"),
-  },
-  {
     path: '/login',
     name: 'login',
     component: () => import("@/views/LoginView.vue"),

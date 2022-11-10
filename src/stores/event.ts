@@ -109,12 +109,12 @@ export const useEventStore = defineStore('event', {
     },
 
     addEvent(event: EventInterface, user_id: number, schedule_id: number) {
-      const payload = {...event, user_id, schedule_id, kind: 'draft'}
+      const payload: EventInterface = {...event, user_id, schedule_id, kind: 'draft'}
       this.activeEvents = [...this.activeEvents, payload]
     },
 
     removeEvent(event: EventInterface) {
-      this.activeEvents = this.activeEvents.filter((el) => el.id != event.id)
+      this.activeEvents = this.activeEvents.filter((el: EventInterface) => el.id != event.id)
     }
   }
 })

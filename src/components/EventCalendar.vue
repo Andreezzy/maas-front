@@ -11,6 +11,11 @@
   const userStore = useUserStore();
   const { currentUser } = userStore;
 
+  const SLOT_LABEL_FORMAT = {
+    hour: '2-digit',
+    meridiem: 'lowercase'
+  } as const
+
   const props = defineProps<{
     events: EventInterface[],
     selectable: boolean,
@@ -20,7 +25,7 @@
     slotMinTime: string,
     slotMaxTime: string,
     validRange: object,
-    businessHours: []
+    businessHours: any
   }>()
 
   const { selectable,
@@ -69,10 +74,7 @@
     initialView: 'timeGridWeek',
     plugins: [ timeGridPlugin, interactionPlugin ],
     slotDuration: '01:00:00',
-    slotLabelFormat: {
-      hour: '2-digit',
-      meridiem: 'lowercase'
-    },
+    slotLabelFormat: SLOT_LABEL_FORMAT,
     selectOverlap: false,
     eventOverlap: false,
     selectable: selectable,

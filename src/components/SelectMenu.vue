@@ -6,7 +6,7 @@
   const props = defineProps<{
     textLabel: string,
     selected: any,
-    values: [],
+    values: any,
     onSelect: Function
   }>()
 

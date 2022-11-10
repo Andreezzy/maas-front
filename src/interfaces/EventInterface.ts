@@ -5,6 +5,7 @@ export interface EventInterface {
   end: string;
   backgroundColor: string;
   borderColor: string;
+  color?: string;
   kind: string;
   user_id: number;
   schedule_id: number;
